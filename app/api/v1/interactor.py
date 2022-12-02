@@ -1,10 +1,12 @@
 from fastapi import APIRouter
+from pydantic import BaseModel
 
 from app.types import *
 from app.db.tables import Ticket as DBTicket
 from app.db import (
         create_ticket,
         get_tickets,
+        get_ticket,
         )
 
 router = APIRouter()
@@ -19,3 +21,8 @@ async def proceed(ticket_request: TicketInfo):
 async def tickets():
     tickets = await get_tickets()
     return tickets
+
+@router.get("/ticket", response_model=DBTicket | None)
+async def status(process_id: int):
+    ticket: DBTicket | None = await get_ticket(process_id)
+    return ticket
