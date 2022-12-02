@@ -6,7 +6,7 @@ from .tables import Ticket
 from . import session
 
 async def create_ticket(ticket_creation: TicketInfo):
-    ticket = Ticket.parse_obj(ticket_creation.dict())
+    ticket = Ticket.parse_obj({**ticket_creation.dict(), "status": "creating"})
     session.add(ticket)
     await session.commit()
 
@@ -19,3 +19,9 @@ async def get_tickets():
     tickets: list[Ticket] = e.all()
 
     return tickets
+
+async def get_ticket(process_id: int):
+    q = select(Ticket).where(Ticket.id == process_id)
+    ticket = (await session.exec(q)).first()
+
+    return ticket

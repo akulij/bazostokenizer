@@ -5,3 +5,4 @@ class Ticket(SQLModel, table=True):
     telegram_account: str
     numbers_count: int
     caption: str
+    status: str
