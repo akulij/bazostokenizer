@@ -5,9 +5,11 @@ import asyncio
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import SQLModel, select, Field
 
+from app.config import settings
+
 async_engine = create_async_engine(
         # "mysql+aiomysql://akulijdev:rerfhtre@178.32.58.161:3306/yeezydirect?charset=utf8mb4",
-        "sqlite+aiosqlite:///:memory:",
+        settings.db_path,
         echo=True,
         future=True
 )
