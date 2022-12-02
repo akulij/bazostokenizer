@@ -1,7 +1,13 @@
+import asyncio
 from fastapi import FastAPI
 
-import app.api
+from app import api
+from app.db import migrate
 
 app = FastAPI()
 
 app.include_router(api.router, prefix="/api")
+
+@app.on_event("startup")
+async def run_migration():
+    await migrate()
