@@ -6,3 +6,4 @@ class Ticket(SQLModel, table=True):
     numbers_count: int
     caption: str
     status: str
+    done: bool

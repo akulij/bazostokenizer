@@ -6,7 +6,7 @@ from .tables import Ticket
 from . import session
 
 async def create_ticket(ticket_creation: TicketInfo):
-    ticket = Ticket.parse_obj({**ticket_creation.dict(), "status": "creating"})
+    ticket = Ticket.parse_obj({**ticket_creation.dict(), "status": "creating", "done": False})
     session.add(ticket)
     await session.commit()
 
