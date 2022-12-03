@@ -1,3 +1,4 @@
+import asyncio
 from typing import Literal
 import typing
 from aiohttp import ClientSession
@@ -7,7 +8,7 @@ from app.config import settings
 API_PATH = "https://onlinesim.io/api"
 DEMO_API_PATH = "https://onlinesim.io/demo/api"
 
-Action = Literal["getState", "getNumbersStats"]
+Action = Literal["getState", "getNumbersStats", "getNum"]
 
 async def fetch_api(action: Action, params: dict, demo: bool = False) -> dict:
     parameters = {
@@ -32,3 +33,23 @@ async def get_numbers_count() -> int:
     data = await fetch_api("getNumbersStats", {"country": 420}, False)
 
     return data["services"]["service_bazos"]["count"]
+
+async def get_number() -> tuple[int, str]:
+    data = await fetch_api("getNum", {"country": 420, "service": "bazos", "number": True})
+
+    return data["tzid"], data["number"]
+
+async def get_sms(tzid: int, index: int) -> str | None:
+    sms = None
+    for _ in range(5):
+        data = await fetch_api("getState", {"tzid": tzid, "msg_list": 1})
+        if "msg" in data:
+            messages = data["msg"]
+            if len(messages) > index:
+                sms = messages[index]["msg"]
+            else:
+                await asyncio.sleep(2)
+        else:
+            await asyncio.sleep(2)
+
+    return sms
