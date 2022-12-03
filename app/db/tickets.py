@@ -2,11 +2,14 @@ from sqlalchemy.util import asyncio
 from sqlmodel import select
 from app.types.ticket import TicketStatus, TicketInfo
 
-from .tables import Ticket
+from .tables import (
+        Ticket,
+        Token
+        )
 from . import session
 
 async def create_ticket(ticket_creation: TicketInfo):
-    ticket = Ticket.parse_obj({**ticket_creation.dict(), "status": "creating", "done": False})
+    ticket = Ticket.parse_obj({**ticket_creation.dict(), "status": "creating"})
     session.add(ticket)
     await session.commit()
 
@@ -25,3 +28,27 @@ async def get_ticket(process_id: int):
     ticket = (await session.exec(q)).first()
 
     return ticket
+
+async def get_undone_tickets():
+    q = select(Ticket).where(Ticket.done == False)
+    e = await session.exec(q)
+
+    tickets: list[Ticket] = e.all()
+
+    return tickets
+
+async def store_token(process_id: int, token: str):
+    token_db = Token(process_id=process_id, token=token)
+    session.add(token_db)
+    await session.commit()
+
+async def set_ticket_done(ticket_id: int, done: bool):
+    q = select(Ticket).where(Ticket.id == ticket_id)
+    e = await session.exec(q)
+
+    ticket: Ticket = e.first()
+
+    ticket.done = done
+
+    session.add(ticket)
+    await session.commit()
