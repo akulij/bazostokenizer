@@ -64,6 +64,8 @@ async def get_token(number: str, code: str):
                                 data=data,
                                 proxy=PROXY) as response:
             status = response.status
+            with open("temp.html", "w") as file:
+                file.write(await response.text())
             print(response.headers)
             cookie = response.headers["Set-Cookie"]
             print(cookie)
