@@ -341,6 +341,14 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "peewee"
+version = "3.15.4"
+description = "a little orm"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pydantic"
 version = "1.10.2"
 description = "Data validation and settings management using python type hints"
@@ -578,7 +586,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "87cf599e4d03866704b85f7b399e034856131c6a4dd01200f07d2195bc1a1baf"
+content-hash = "3deb9a889f6d5b481824d5069db704d38965756132fb69d06fb10be38c21d144"
 
 [metadata.files]
 aiogram = [
@@ -1088,6 +1096,9 @@ orjson = [
     {file = "orjson-3.8.2-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:b9a34519d3d70935e1cd3797fbed8fbb6f61025182bea0140ca84d95b6f8fbe5"},
     {file = "orjson-3.8.2-cp39-none-win_amd64.whl", hash = "sha256:2734086d9a3dd9591c4be7d05aff9beccc086796d3f243685e56b7973ebac5bc"},
     {file = "orjson-3.8.2.tar.gz", hash = "sha256:a2fb95a45031ccf278e44341027b3035ab99caa32aa173279b1f0a06324f434b"},
+]
+peewee = [
+    {file = "peewee-3.15.4.tar.gz", hash = "sha256:2581520c8dfbacd9d580c2719ae259f0637a9e46eda47dfc0ce01864c6366205"},
 ]
 pydantic = [
     {file = "pydantic-1.10.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:bb6ad4489af1bac6955d38ebcb95079a836af31e4c4f74aba1ca05bb9f6027bd"},
