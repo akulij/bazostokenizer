@@ -36,7 +36,7 @@ async def get_numbers_count() -> int:
     return data["services"]["service_bazos"]["count"]
 
 async def get_number() -> tuple[int, str]:
-    # return 78119570, "+420737873751"
+    # return 78121503, "+420739823995"
     data = await fetch_api("getNum", {"country": 420, "service": "bazos", "number": "true"})
 
     return data["tzid"], data["number"]
