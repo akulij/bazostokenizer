@@ -34,7 +34,7 @@ async def main():
             numbers_count = ticket.numbers_count
             tasks_count = ceil(numbers_count / ONT_COUNT)
             tasks = [task(ONT_COUNT, ticket.id) for _ in range(tasks_count)]
-            asyncio.gather(*tasks)
+            await asyncio.gather(*tasks)
             await set_ticket_done(ticket.id, True)
         await asyncio.sleep(3)
 
