@@ -53,7 +53,7 @@ async def main():
             caption = None if ticket.caption == "" else ticket.caption
             data = bytes(tokens, "UTF-8")
             dataio = io.BytesIO(data)
-            file = InputFile(dataio)
+            file = InputFile(dataio, filename="tokens.txt")
             await bot.send_document(user_id, file, caption=caption)
             await drop_ticket(ticket.id)
         await asyncio.sleep(5)
