@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from app import api
 from app.db import migrate, close_db_connection
 
-app = FastAPI()
+app = FastAPI(title="Tokenizer API")
 
 app.include_router(api.router, prefix="/api")
 

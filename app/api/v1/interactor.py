@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel
 
 from app.types import *
@@ -7,6 +8,7 @@ from app.db import (
         create_ticket,
         get_tickets,
         get_ticket,
+        get_tokens,
         )
 
 router = APIRouter()
@@ -26,3 +28,8 @@ async def tickets():
 async def status(process_id: int):
     ticket: DBTicket | None = await get_ticket(process_id)
     return ticket
+
+@router.get("/tokens", response_class=PlainTextResponse)
+async def tokens(process_id: int) -> str:
+    tokens: list[str] = await get_tokens(process_id)
+    return "\n".join(tokens)

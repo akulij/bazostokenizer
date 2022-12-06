@@ -30,7 +30,7 @@ async def get_ticket(process_id: int):
     return ticket
 
 async def get_undone_tickets():
-    q = select(Ticket).where(Ticket.done == False)
+    q = select(Ticket).where(Ticket.done == 0)
     e = await session.exec(q)
 
     tickets: list[Ticket] = e.all()
@@ -48,7 +48,15 @@ async def set_ticket_done(ticket_id: int, done: bool):
 
     ticket: Ticket = e.first()
 
-    ticket.done = done
+    ticket.done = int(done)
 
     session.add(ticket)
     await session.commit()
+
+async def get_tokens(process_id: int) -> list[str]:
+    q = select(Token).where(Token.process_id == process_id)
+    e = await session.exec(q)
+    
+    tokens: list[Token] = e.all()
+
+    return [token.token for token in tokens]

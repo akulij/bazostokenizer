@@ -26,6 +26,7 @@ async def fetch_api(action: Action, params: dict, demo: bool = False) -> dict:
 
     await session.close()
 
+    print(data)
     return data
 
 
@@ -35,11 +36,13 @@ async def get_numbers_count() -> int:
     return data["services"]["service_bazos"]["count"]
 
 async def get_number() -> tuple[int, str]:
-    data = await fetch_api("getNum", {"country": 420, "service": "bazos", "number": True})
+    # return 78087807, "+420737111812"
+    data = await fetch_api("getNum", {"country": 420, "service": "bazos", "number": "true"})
 
     return data["tzid"], data["number"]
 
 async def get_sms(tzid: int, index: int) -> str | None:
+    wait_time = 15
     sms = None
     for _ in range(5):
         data = await fetch_api("getState", {"tzid": tzid, "msg_list": 1})
@@ -47,9 +50,10 @@ async def get_sms(tzid: int, index: int) -> str | None:
             messages = data["msg"]
             if len(messages) > index:
                 sms = messages[index]["msg"]
+                break
             else:
-                await asyncio.sleep(2)
+                await asyncio.sleep(wait_time)
         else:
-            await asyncio.sleep(2)
+            await asyncio.sleep(wait_time)
 
     return sms
