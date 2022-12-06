@@ -20,10 +20,11 @@ ONT_COUNT = 4 # One Number Token count
 
 async def task(count: int, process_id: int):
     tzid, number = await get_number()
+    # for index in range(2, count):
     for index in range(count):
         await send_sms(number)
         code = await get_sms(tzid, index)
-        token = get_token(number, code)
+        token = await get_token(number, code)
         await store_token(process_id, token)
 
 async def main():
@@ -35,5 +36,6 @@ async def main():
             tasks = [task(ONT_COUNT, ticket.id) for _ in range(tasks_count)]
             asyncio.gather(*tasks)
             await set_ticket_done(ticket.id, True)
+        await asyncio.sleep(3)
 
 asyncio.run(main())

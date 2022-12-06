@@ -1,4 +1,7 @@
+import asyncio
 from aiohttp import ClientSession
+
+PROXY = "http://bkabuse5229:5f35bc@109.248.7.222:10017"
 
 COOKIES = {
     "rekkk": "ano",
@@ -37,10 +40,46 @@ async def send_sms(number: str):
         async with session.post(URL,
                                 cookies=COOKIES,
                                 headers=HEADERS,
-                                data=data) as response:
+                                data=data,
+                                proxy=PROXY) as response:
             status = response.status
     
     if status == 200:
         return True
     else:
         return False
+
+async def get_token(number: str, code: str):
+    data = {
+        "klic": code,
+        "klictelefon": number,
+        "Submit": "Odeslat",
+    }
+    
+    token = None
+    async with ClientSession() as session:
+        async with session.post(URL,
+                                cookies=COOKIES,
+                                headers=HEADERS,
+                                data=data,
+                                proxy=PROXY) as response:
+            status = response.status
+            print(response.headers)
+            cookie = response.headers["Set-Cookie"]
+            print(cookie)
+            filtered = session.cookie_jar.filter_cookies(URL)
+            for key, value in filtered.items():
+                print(f"COOKIE {key} | {value}")
+                print(value.value)
+                if "bkod=" in str(value):
+                    print("THERE")
+                    print(value.key)
+                    print(value.value)
+                    token = value.value
+                    print(token)
+                    break
+    
+    # token = cookie.split(";", 1)[0].split("bkod=", 1)[1]
+    # token = data
+
+    return token
