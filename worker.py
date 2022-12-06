@@ -16,7 +16,7 @@ from bazosapi import (
         get_token
         )
 
-ONT_COUNT = 4 # One Number Token count
+ONT_COUNT = 3 # One Number Token count
 
 async def task(count: int, process_id: int):
     tzid, number = await get_number()
