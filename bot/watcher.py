@@ -48,7 +48,7 @@ async def main():
         tickets = await get_tickets(done=True)
         for ticket in tickets:
             user_id = ticket.telegram_account
-            if type(user_id) == str and user_id[0] != "9": continue
+            if type(user_id) == str and user_id.isdecimal(): continue
             tokens = await get_tokens(ticket.id) or "token"
             caption = None if ticket.caption == "" else ticket.caption
             data = bytes(tokens, "UTF-8")
