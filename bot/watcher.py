@@ -7,10 +7,10 @@ from aiogram.types import InputFile
 from config import bot, API_BASE
 from modules.types import TicketData
 
-async def get_tickets(done: bool = True):
+async def get_tickets(done: bool = None):
     params = {}
     if type(done) == bool:
-        params["done"] = done
+        params["done"] = int(done)
 
     async with ClientSession() as session:
         async with session.get(f"{API_BASE}/tickets", params=params) as response:
@@ -48,7 +48,8 @@ async def main():
         tickets = await get_tickets(done=True)
         for ticket in tickets:
             user_id = ticket.telegram_account
-            tokens = await get_tokens(ticket.id)
+            if type(user_id) == str and user_id[0] != "9": continue
+            tokens = await get_tokens(ticket.id) or "token"
             caption = None if ticket.caption == "" else ticket.caption
             data = bytes(tokens, "UTF-8")
             dataio = io.BytesIO(data)

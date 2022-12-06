@@ -14,3 +14,4 @@ class TicketData(BaseModel):
     numbers_count: int
     caption: str
     status: str
+    done: int
