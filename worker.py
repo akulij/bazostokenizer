@@ -23,6 +23,7 @@ async def task(count: int, process_id: int):
     print("TZ")
     print(tzid, number)
     # for index in range(2, count):
+    drop_flag = False
     for index in range(count):
         print("sending sms")
         await send_sms(number)
@@ -36,9 +37,14 @@ async def task(count: int, process_id: int):
             print("getting code")
             code = await get_sms(tzid, index)
         print("storing {token=}")
+        if token == None:
+            drop_flag = True
+            break
         await store_token(process_id, token)
         print("cooldown")
         await asyncio.sleep(60*1.5)
+    if drop_flag:
+        await task(count, process_id)
 
 async def main():
     while True:
