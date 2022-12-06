@@ -26,6 +26,7 @@ async def task(count: int, process_id: int):
         code = await get_sms(tzid, index)
         token = await get_token(number, code)
         await store_token(process_id, token)
+        await asyncio.sleep(30)
 
 async def main():
     while True:
