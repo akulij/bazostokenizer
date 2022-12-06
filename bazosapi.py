@@ -2,6 +2,7 @@ import asyncio
 from aiohttp import ClientSession
 
 PROXY = "http://bkabuse5229:5f35bc@109.248.7.222:10017"
+PROXY = None
 
 COOKIES = {
     "rekkk": "ano",

@@ -23,7 +23,7 @@ async def task(count: int, process_id: int):
     print("TZ")
     print(tzid, number)
     # for index in range(2, count):
-    for index in range(0, count):
+    for index in range(count):
         print("sending sms")
         await send_sms(number)
         print("getting code")
@@ -38,7 +38,7 @@ async def task(count: int, process_id: int):
         print("storing {token=}")
         await store_token(process_id, token)
         print("cooldown")
-        await asyncio.sleep(60*2)
+        await asyncio.sleep(60*1.5)
 
 async def main():
     while True:
