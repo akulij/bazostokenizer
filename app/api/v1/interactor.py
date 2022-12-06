@@ -9,6 +9,7 @@ from app.db import (
         get_tickets,
         get_ticket,
         get_tokens,
+        drop_ticket,
         )
 
 router = APIRouter()
@@ -20,14 +21,18 @@ async def proceed(ticket_request: TicketInfo):
     return ticket
 
 @router.get("/tickets", response_model=list[DBTicket])
-async def tickets():
-    tickets = await get_tickets()
+async def tickets(done: int | None = None):
+    tickets = await get_tickets(done=done)
     return tickets
 
 @router.get("/ticket", response_model=DBTicket | None)
 async def status(process_id: int):
     ticket: DBTicket | None = await get_ticket(process_id)
     return ticket
+
+@router.get("/dropticket")
+async def status(process_id: int):
+    await drop_ticket(process_id)
 
 @router.get("/tokens", response_class=PlainTextResponse)
 async def tokens(process_id: int) -> str:

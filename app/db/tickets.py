@@ -15,8 +15,10 @@ async def create_ticket(ticket_creation: TicketInfo):
 
     return TicketStatus(process_id=ticket.id, msg="Creating")
 
-async def get_tickets():
+async def get_tickets(done: int | None = None):
     q = select(Ticket)
+    if type(done) == int:
+        q = select(Ticket).where(Ticket.done == done)
     e = await session.exec(q)
     
     tickets: list[Ticket] = e.all()
@@ -60,3 +62,14 @@ async def get_tokens(process_id: int) -> list[str]:
     tokens: list[Token] = e.all()
 
     return [token.token for token in tokens]
+
+async def drop_ticket(ticket_id: int):
+    q = select(Ticket).where(Ticket.id == ticket_id)
+    e = await session.exec(q)
+
+    ticket: Ticket = e.first()
+
+    ticket.done = 2
+
+    session.add(ticket)
+    await session.commit()
