@@ -1,7 +1,11 @@
 from aiohttp import ClientSession
 
 ENDPOINTS = [
-        "https://functions.yandexcloud.net/d4eu2pjdbl5csnih2i7b"
+        "https://functions.yandexcloud.net/d4eu2pjdbl5csnih2i7b",
+        "https://functions.yandexcloud.net/d4eg74rncihgcg18c9v9",
+        "https://functions.yandexcloud.net/d4esmg9vgj17nk0h8qtc",
+        "https://functions.yandexcloud.net/d4e4rh73qji6lvloaaa3",
+        "https://functions.yandexcloud.net/d4eob2fop2gbcgliku6m",
         ]
 
 def generator(l):
