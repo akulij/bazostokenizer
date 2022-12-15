@@ -1,48 +1,25 @@
-import asyncio
 from aiohttp import ClientSession
 
-PROXY = "http://bkabuse5229:5f35bc@109.248.7.222:10017"
-PROXY = None
+ENDPOINTS = [
+        "https://functions.yandexcloud.net/d4eu2pjdbl5csnih2i7b"
+        ]
 
-COOKIES = {
-    "rekkk": "ano",
-    "testcookie": "ano",
-    "testcookieaaa": "ano",
-    "rekkkb": "ano",
-}
+def generator(l):
+    idx = 0
+    while True:
+        yield l[idx%len(l)]
+        idx += 1
 
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.5",
-    # "Accept-Encoding": "gzip, deflate, br",
-    "Origin": "https://zvirata.bazos.cz",
-    "DNT": "1",
-    "Connection": "keep-alive",
-    "Referer": "https://zvirata.bazos.cz/pridat-inzerat.php",
-    "Upgrade-Insecure-Requests": "1",
-    "Sec-Fetch-Dest": "document",
-    "Sec-Fetch-Mode": "navigate",
-    "Sec-Fetch-Site": "same-origin",
-    "Sec-Fetch-User": "?1",
-    # "TE": "trailers",
-}
-
-URL = "https://zvirata.bazos.cz/pridat-inzerat.php"
+endpoint = generator(ENDPOINTS)
 
 async def send_sms(number: str):
     data = {
-        "podminky": "1",
-        "teloverit": number,
-        "Submit": "Odeslat",
-    }
-    
+            "method": "send_sms",
+            "arguments": [number],
+            }
     async with ClientSession() as session:
-        async with session.post(URL,
-                                cookies=COOKIES,
-                                headers=HEADERS,
-                                data=data,
-                                proxy=PROXY) as response:
+        async with session.post(next(endpoint),
+                                data=data) as response:
             status = response.status
     
     if status == 200:
@@ -52,37 +29,16 @@ async def send_sms(number: str):
 
 async def get_token(number: str, code: str):
     data = {
-        "klic": code,
-        "klictelefon": number,
-        "Submit": "Odeslat",
-    }
-    
-    token = None
+            "method": "get_token",
+            "arguments": [number, code],
+            }
     async with ClientSession() as session:
-        async with session.post(URL,
-                                cookies=COOKIES,
-                                headers=HEADERS,
-                                data=data,
-                                proxy=PROXY) as response:
+        async with session.post(next(endpoint),
+                                data=data) as response:
             status = response.status
-            with open("temp.html", "w") as file:
-                file.write(await response.text())
-            print(response.headers)
-            cookie = response.headers["Set-Cookie"]
-            print(cookie)
-            filtered = session.cookie_jar.filter_cookies(URL)
-            for key, value in filtered.items():
-                print(f"COOKIE {key} | {value}")
-                print(value.value)
-                if "bkod=" in str(value):
-                    print("THERE")
-                    print(value.key)
-                    print(value.value)
-                    token = value.value
-                    print(token)
-                    break
-    
-    # token = cookie.split(";", 1)[0].split("bkod=", 1)[1]
-    # token = data
 
-    return token
+            if status == 200:
+                data = await response.json()
+                return data["content"]
+            else:
+                return None

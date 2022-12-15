@@ -2,3 +2,4 @@ __pycache__
 .env
 *.db
 temp.html
+*_old
