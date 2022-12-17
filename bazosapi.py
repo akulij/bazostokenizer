@@ -28,7 +28,7 @@ HEADERS = {
     # "TE": "trailers",
 }
 
-URL = "http://zvirata.bazos.cz/pridat-inzerat.php"
+URL = "https://zvirata.bazos.cz/pridat-inzerat.php"
 
 async def send_sms(number: str):
     data = {
