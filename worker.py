@@ -53,8 +53,16 @@ async def main():
             numbers_count = ticket.numbers_count
             tasks_count = ceil(numbers_count / ONT_COUNT)
             print(f"TICKET for tasks count {tasks_count}")
+
             tasks = [task(ONT_COUNT, ticket.id) for _ in range(tasks_count)]
-            await asyncio.gather(*tasks)
+            pool = []
+            for pstask in tasks:
+                pool.append(pstask)
+                if len(pool) == 5:
+                    await asyncio.gather(*pool)
+                    pool.clear()
+            await asyncio.gather(*pool)
+
             await set_ticket_done(ticket.id, True)
         await asyncio.sleep(3)
 
