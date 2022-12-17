@@ -44,6 +44,8 @@ async def send_sms(number: str):
                                 data=data,
                                 proxy=PROXY) as response:
             status = response.status
+            with open("tempsmssend.html", "w") as file:
+                file.write(await response.text())
     
     if status == 200:
         return True

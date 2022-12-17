@@ -25,7 +25,7 @@ async def task(count: int, process_id: int):
     # for index in range(2, count):
     drop_flag = False
     for index in range(count):
-        print("sending sms")
+        print(f"sending sms to number {number}")
         await send_sms(number)
         print("getting code")
         code = await get_sms(tzid, index)
