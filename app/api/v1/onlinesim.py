@@ -37,6 +37,11 @@ async def get_numbers_count() -> int:
 
 async def get_number() -> tuple[int, str]:
     # return 79113553, "+420739801116"
+    numbers = await fetch_api("getState", {"msg_list": 1})
+    for number in numbers:
+        if len(number["msg"]) < 4:
+            return number["tzid"], number["number"]
+
     data = await fetch_api("getNum", {"country": 420, "service": "bazos", "number": "true"})
 
     return data["tzid"], data["number"]
@@ -45,7 +50,7 @@ async def get_sms(tzid: int, index: int) -> str | None:
     wait_time = 5
     sms = None
     for _ in range(5):
-        data = await fetch_api("getState", {"tzid": tzid, "msg_list": 1})
+        data = await fetch_api("getState", {"tzid": tzid, "msg_list": 1})[0]
         if "msg" in data:
             messages = data["msg"]
             if len(messages) > index:

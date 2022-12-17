@@ -16,7 +16,7 @@ from bazosapi import (
         get_token
         )
 
-ONT_COUNT = 3 # One Number Token count
+ONT_COUNT = 4 # One Number Token count
 
 async def task(count: int, process_id: int):
     tzid, number = await get_number()
@@ -51,10 +51,10 @@ async def main():
         tickets = await get_undone_tickets()
         for ticket in tickets:
             numbers_count = ticket.numbers_count
-            tasks_count = ceil(numbers_count / ONT_COUNT)
+            tasks_count = numbers_count
             print(f"TICKET for tasks count {tasks_count}")
 
-            tasks = [task(ONT_COUNT, ticket.id) for _ in range(tasks_count)]
+            tasks = [task(1, ticket.id) for _ in range(tasks_count)]
             pool = []
             for pstask in tasks:
                 pool.append(pstask)
